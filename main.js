@@ -688,7 +688,6 @@ function run(time) {
 
         oni1.move(time);
     }
-    console.log(event_flag);
 
     renderer.render(scene, camera);
 
@@ -715,7 +714,6 @@ start_button.addEventListener("click", function() {
 
 prototype_button.addEventListener("click", function() {
     prototype_mode = true;
-    console.log(prototype_mode);
     start();
 });
 
