@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                background-color: black;
+            }
+        </style>
+        <title>Ao Oni's Spooky House</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="hud_window">
+            <p id="hud_text"></p>
+        </div>
+        <div id="div1">
+            <button id="start_button">Start Game</button>
+            <button id="prototype_button">Prototype Mode</button>
+            <button id="menu_button">Menu</button>
+        </div>
+        <div id="menu">
+            <h1 style="color: grey; text-align: center;">Ao Oni's Spooky House (ID: 7474)</h1>
+            <p style="color: grey; text-align: center; font-size: 22px">
+                Your head pounding, you open your eyes to find yourself in a cold, dark building.<br>
+                The only way out is locked, and something tells you you're not alone.<br><br>
+                WASD and mouse to move<br>
+                Shift to run<br>
+                E to interact<br>
+                F to toggle flashlight
+            </p>
+        </div>
+
+        <script type="importmap">
+        {
+            "imports": { 
+                "three": "./three/build/three.module.js",
+                "plc": "./three/examples/jsm/controls/PointerLockControls.js"
+            }
+        }
+        </script>
+        <script type="module" src="./main.js"></script>
+    </body>
+</html>
