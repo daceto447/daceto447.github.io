@@ -234,6 +234,9 @@ function handle_movement(time) {
     const strafe_vel = (keys_down['a'] ? 1 : 0) + (keys_down['d'] ? -1 : 0);
     const fly_vel = (keys_down[' '] ? 1 : 0) + (keys_down['control'] ? -1 : 0);
 
+    // movement code based on code from this video:
+    // https://www.youtube.com/watch?v=oqKzxPMLWxo
+
     const qx = new T.Quaternion();
     qx.setFromAxisAngle(new T.Vector3(0, 1, 0), cam_phi);
 
@@ -574,6 +577,9 @@ function clamp(value, min, max) {
 function update_camera(cam_rotation) {
     const xh = mouseX_delta / canvas.width;
     const yh = mouseY_delta / canvas.height;
+ 
+    // movement code based on code from this video:
+    // https://www.youtube.com/watch?v=oqKzxPMLWxo
 
     cam_phi += -xh * 5;
     cam_theta = clamp(cam_theta + -yh * 5, -Math.PI/3, Math.PI/3);
