@@ -171,6 +171,9 @@ document.addEventListener("keydown", e => {
         case 'e': 
             interact();
             break;
+        case 'r':
+            radio_on = !radio_on;
+            break;
         case 'l':
             debug_mode = !debug_mode;
             break;
@@ -636,6 +639,7 @@ let in_closet = false;
 let in_pickup = false;
 let control = true;
 let map_generated = false;
+let radio_on = true;
 
 let oni1;
 function setup() {
@@ -673,7 +677,7 @@ function run(time) {
         if (oni_dist < 7) {
             lose_game();
         } else {
-            radio.volume = 7 / oni_dist;
+            radio.volume = radio_on ? 7 / oni_dist :  0;
         }
 
         if (event_flag == 0 && camera.position.x < 75 && camera.position.z < -42) {
