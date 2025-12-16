@@ -677,7 +677,7 @@ function run(time) {
         if (oni_dist < 7) {
             lose_game();
         } else {
-            radio.volume = radio_on ? 7 / oni_dist :  0;
+            radio.volume = radio_on ? 7 / oni_dist : 0;
         }
 
         if (event_flag == 0 && camera.position.x < 75 && camera.position.z < -42) {
