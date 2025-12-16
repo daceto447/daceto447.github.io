@@ -228,7 +228,7 @@ function direction_vector(obj1, obj2) {
 
 function handle_movement(time) {
     let speed = debug_mode ? 0.8 : 0.2;
-    speed = keys_down['shift'] ? speed * 1.5 : speed;
+    speed = keys_down['shift'] == true ? speed * 1.5 : speed;
 
     const forward_vel = (keys_down['w'] ? 1 : 0) + (keys_down['s'] ? -1 : 0);
     const strafe_vel = (keys_down['a'] ? 1 : 0) + (keys_down['d'] ? -1 : 0);
