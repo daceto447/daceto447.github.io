@@ -66,6 +66,9 @@ const point_light = new T.PointLight(0xffffff, 0, 20, 0.3);
 point_light.position.y = 5
 camera.add(point_light);
 
+const bgm = new Audio("../audio/bgm.mp3");
+const radio = new Audio("../audio/radio.mp3");
+
 class CollisionObject {
     constructor(obj, collision) {
         this.obj = obj;
@@ -106,7 +109,8 @@ class Key {
 
 let items = [];
 let doors = [];
-let keys = [];
+let keys_inv = [];
+let keys_down = [];
 let bars = [];
 
 class Oni {
@@ -154,7 +158,7 @@ class Oni {
 
 document.addEventListener("keydown", e => {
     const key = e.key.toLowerCase()
-    keys[key] = true;
+    keys_down[key] = true;
     switch(key) {
         case 't': 
             console.log(camera.position);
@@ -173,7 +177,7 @@ document.addEventListener("keydown", e => {
     }
 });
 document.addEventListener("keyup", e => {
-    keys[e.key.toLowerCase()] = false;
+    keys_down[e.key.toLowerCase()] = false;
 });
 
 let mouseX_delta = 0;
@@ -221,11 +225,11 @@ function direction_vector(obj1, obj2) {
 
 function handle_movement(time) {
     let speed = debug_mode ? 0.8 : 0.2;
-    speed = keys['shift'] ? speed * 1.5 : speed;
+    speed = keys_down['shift'] ? speed * 1.5 : speed;
 
-    const forward_vel = (keys['w'] ? 1 : 0) + (keys['s'] ? -1 : 0);
-    const strafe_vel = (keys['a'] ? 1 : 0) + (keys['d'] ? -1 : 0);
-    const fly_vel = (keys[' '] ? 1 : 0) + (keys['control'] ? -1 : 0);
+    const forward_vel = (keys_down['w'] ? 1 : 0) + (keys_down['s'] ? -1 : 0);
+    const strafe_vel = (keys_down['a'] ? 1 : 0) + (keys_down['d'] ? -1 : 0);
+    const fly_vel = (keys_down[' '] ? 1 : 0) + (keys_down['control'] ? -1 : 0);
 
     const qx = new T.Quaternion();
     qx.setFromAxisAngle(new T.Vector3(0, 1, 0), cam_phi);
@@ -315,7 +319,7 @@ function collect_key(key) {
     hud_window.style.visibility = "visible";
     hud_text.innerHTML = "Obtained entrance key.";
     key.door.openable = true;
-    keys.pop(key);
+    keys_inv.pop(key);
     event_flag = 3; // whateva
     setup_end()
 }
@@ -336,7 +340,7 @@ function interact() {
     raycaster.ray.direction.copy(cam_dir).normalize();
 
     // check if picking up key
-    for (let key of keys) {
+    for (let key of keys_inv) {
         if (raycaster.ray.intersectsBox(key.box)) {
             collect_key(key);
             return;
@@ -553,7 +557,7 @@ function make_map() {
     entrance_key.scale.setScalar(2);
     map.add(entrance_key);
     const entrance_key_obj = new Key(entrance_key, door0_obj);
-    keys.push(entrance_key_obj);
+    keys_inv.push(entrance_key_obj);
 
     map_generated = true;
 }
@@ -601,6 +605,8 @@ function fade_in() {
 }
 
 function end_game() {
+    bgm.volume = 0;
+    radio.volume = 0;
     flashlight.visible = false;
     oni1.moving = false;
     control = false;
@@ -663,8 +669,11 @@ function run(time) {
         }
 
         const oni_dir_vector = direction_vector(oni1.mesh, camera);
-        if (oni_dir_vector.length() < 7) {
+        const oni_dist = oni_dir_vector.length();
+        if (oni_dist < 7) {
             lose_game();
+        } else {
+            radio.volume = 7 / oni_dist;
         }
 
         if (event_flag == 0 && camera.position.x < 75 && camera.position.z < -42) {
@@ -705,6 +714,11 @@ function start() {
         requestAnimationFrame(fade_in);
         requestAnimationFrame(run);
     }
+    bgm.loop = true;
+    bgm.play();
+    radio.loop = true;
+    radio.volume = 0;
+    radio.play();
 }
 
 start_button.addEventListener("click", function() {
